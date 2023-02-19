@@ -5,6 +5,10 @@ const port = 5000; //포트는 아무렇게해도됨
 const bodyParser = require("body-parser"); //다운받은 body-parser을 가져옴
 const {User}= require("./models/User") //스키마 가져옴 app.post하기위해
 
+
+const config=require("./config/key"); //비밀설정 : mongoURL를 깃허브에 못올리게 하도록 key 파일에서 배포 후 환경인지, 로컬환경인지 구분하고 URI를 가져온다.
+
+
 //boy-parser는 클라이언트에서 보내는 정보를 분석해서 가져올 수 있게하는 것
 //application/x-www-form-urlencoded 같은 형식의 데이터를 가져옴
 app.use(bodyParser.urlencoded({extended:true}));
@@ -15,7 +19,7 @@ app.use(bodyParser.json());
 const mongoose =require('mongoose');
 mongoose.set('strictQuery', true);
 //몽구스 연결하기 -> 아이디 뒤에 <password> 부분  내 비밀번호로 바꿔서 넣기
-mongoose.connect("mongodb+srv://oridori2705:abcd1234@node-test.of25qpt.mongodb.net/?retryWrites=true&w=majority",{
+mongoose.connect(config.mongoURI,{ //config.mongoURI : 비밀설정 : 위에서 구분한 변수를 가져온다.
     useNewUrlParser:true, useUnifiedTopology : true
 }).then(()=>console.log("good")).catch(err=>console.log(err))
 
