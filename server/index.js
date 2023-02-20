@@ -121,6 +121,9 @@ app.get("/api/users/logout",auth,(req,res)=>{
   })
 })
 
+//서버측 response 테스트
+app.get('/api/hello',(req,res)=> res.send("hello World!"))
+
 
 //port 3000에 이 앱을 실행하는 것이다.
 app.listen(port, () => {
