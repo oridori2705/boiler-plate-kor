@@ -10,8 +10,16 @@ const config=require("./config/key"); //비밀설정 : mongoURL를 깃허브에 
 
 const cookieParser =require("cookie-parser");//토큰저장하기 :cookie-parser 가져오기
 
+const {auth} =require("./middleware/auth")//토큰 인증 확인하기 : auth 파일 가져오기
+
+
+
+
+
+
 
 app.use(cookieParser());//cookie-parser 사용할 수 있음
+
 
 
 //boy-parser는 클라이언트에서 보내는 정보를 분석해서 가져올 수 있게하는 것
@@ -38,7 +46,7 @@ app.get('/', (req, res) => {
 
 //회원 가입 할 때 필요한 정보들을 client에서 가져오면 그것들을 데이터베이스에 넣어준다.-> 우리가 만든 User.js 이용
 //req.body에는 객체 {id : 132 , password : 1456} 와 같은 정보들이 들어있다. ->이러한 정보가 들어있는 이유는 body-parser가 있기 때문이다.
-app.post("/register",(req,res)=>{
+app.post("api/users/register",(req,res)=>{
   const user= new User(req.body);
   //몽고DB에서 오는 메소드, 정보들이 user모델에 저장
   user.save((err,userIfon)=>{ //저장할 때 오류가 있으면 클라이언트에 에러가 있다고 전달해야되는데 이를 json형식으로 성공하지 못했다고 err메세지와 함께 전달한다. 
@@ -51,7 +59,7 @@ app.post("/register",(req,res)=>{
 
 
 //----------------------------------login Route 부분---------------------------------------------
-app.post('/login',(req,res)=>{
+app.post('api/users/login',(req,res)=>{
   //1.요청된 이메일을 데이터베이스에 있는지 찾는다.-------------------------------------------
   //User모델을 가져와서 findOne(몽고DB에서 제공하는 메소드)
   //찾고자하는 이메일을 email : req.body.email 넣는다.
@@ -86,6 +94,23 @@ app.post('/login',(req,res)=>{
   })
   
   
+})
+
+//------------------------------Auth부분-----------------------------------------
+//app.post(경로,콜백함수) 인데 중간에 auth가 있다 -> auth 수행 후 ->req를 통해 해당 인증확인된 유저의 정보를 가져옴
+app.post("/api/users/auth",auth,(req,res)=>{
+
+  res.status(200).json({
+    _id:req.user._id,
+    isAdmin:req.user.role === 0 ? false : true,  //role 0 이면 일반유저 role 0이아니면 관리자
+    isAuth:true,
+    email: req.user.email,
+    name: req.user.name,
+    lastname: req.user.lastname,
+    role : req.user.role,
+    image: req.user.image
+
+  })
 })
 
 

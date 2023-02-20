@@ -94,6 +94,25 @@ userSchema.methods.generateToken=function(cb){
     })
 }
 
+//---------------------------------Auth 인증 부분----------------------------------
+//findByToken함수를 임의적으로 만듦
+//1.token을 가져와서 복호화하고 토큰과 유저아이디를 통해 해당하는 유저를 가져온다.
+//jwt.verify를 통해 token(user_id+"secretToken") 을 복호화해서 user._id부분만 decode라는 변수에 저장된다.
+userSchema.statics.findByToken =function(token,cb){ //여기 token은 auth에서 가져온 클라이언트에 저장되어있는 token이다.
+    var user=this;
+
+    //토큰을 decode(복호화)한다.(JSONWEBTOKEN의 명령어)
+    jwt.verify(token,"secretToken",function(err,decode){
+        //유저아이디와 토큰을 이용해서 유저를 찾아 가져오고
+        user.findOne({"_id" : decode,"token":token},function(err,user){
+            if(err) return cb(err);
+            cb(null,user);//해당 유저 정보 전달
+        })
+        //클라이언트에서 가져온 token과 DB에 보관된 토큰이 일치하는지 확인
+    })
+}
+
+
 
 
 
