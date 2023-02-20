@@ -39,6 +39,8 @@ const userSchema = mongoose.Schema({
     }
 
 })
+
+
 //비밀번호 암호화 : 몽구스에서 가져온 메소드 pre("save") -> 유저정보를 저장하기 전에 무엇을 한다는 의미, next파라미터를 줘서 안의 함수가 끝나면 save로 넘어간다.
 userSchema.pre("save",function(next){
 
@@ -65,6 +67,7 @@ userSchema.pre("save",function(next){
 
 })
 
+
 //loginRoute에서 같은 이메일을 찾은 DB의 정보와 비밀번호가 같은지 확인하는 부분
 //comparePassword는 우리가 임의로 만든 함수 이름이므로 바꿔도됨 그대신 index.js에서 받는 명령어도 바꿔줘야함
 //plainPassword는 맞는지 확인하는 비밀번호
@@ -83,10 +86,10 @@ userSchema.methods.generateToken=function(cb){
     //jsonwebtoken을 이용해서 token을 생성하기
     var user =this;
     //몽고DB에있는 _id를 가져온다
-    jwt.sign(user._id.toHexString(),'secretToken');//이 부분이 에러가 나옴->plain object가 나와야함 toHexstring으로 해결
+    var token=jwt.sign(user._id.toHexString(),'secretToken');//이 부분이 에러가 나옴->plain object가 나와야함 toHexstring으로 해결
     //user._id+"secretToken"=token; => 나중에 해석할때 secretToken을 넣으면 -> user._id가 나온다.(누구인지 알 수있음) secretToken은 기억해야함
 
-    user.token=this.token;
+    user.token=token;//user스키마에 있는 token에 저장
     user.save(function(err,user){
         if(err) return cb(err);
 
