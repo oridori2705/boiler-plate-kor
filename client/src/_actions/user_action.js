@@ -25,7 +25,7 @@ export function registerUser(dataToSubmit) {
 
 
 export function auth() {
-    const request=axios.get("/api/users/auth").then(response=>response.data)
+    const request=axios.get("/api/users/auth").then(response=>response.data) //Post가 아닌 get임
     return{ //지정된 reducer로 보내준다.
         type : AUTH_USER,
         payload: request
