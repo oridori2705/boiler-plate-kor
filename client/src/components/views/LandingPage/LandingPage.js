@@ -9,7 +9,9 @@ function LandingPage() {
   }, [])
   
    return (
-    <div>LandingPage</div>
+    <div style={{display : "flex", justifyContent : "center", alignItems : "center", width : "100%", height: "100vh"}} /*vh는 뷰포트기준 */> 
+      LandingPage
+    </div>
   )
 }
 
