@@ -1,6 +1,7 @@
 import {
     LOGIN_USER,
-    REGISTER_USER
+    REGISTER_USER,
+    AUTH_USER
 } from "../_actions/types";
 
 //Reducer는 (previousState,action) => nextState, 즉 이전의 state와 action을 받은 다음 state를 만들어내는 것이다.
@@ -12,6 +13,8 @@ export default function(state={},action){
             return {...state, loginSuccessed : action.payload};
         case REGISTER_USER:
             return {...state, RegisterSuccessed : action.payload};
+        case AUTH_USER:
+            return {...state, userData : action.payload};
         default:
             return state; //안해주면 오류가 발생한다.
     }

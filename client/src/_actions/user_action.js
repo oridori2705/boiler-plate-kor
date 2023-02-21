@@ -1,7 +1,8 @@
 import axios from "axios";
 import {
     LOGIN_USER,
-    REGISTER_USER
+    REGISTER_USER,
+    AUTH_USER
 } from "./types";
 //LoginPage에서 받은 이메일과 아이디를 server측 login부분으로 보낸다. 보낸데이터를 검사하고 다시 response.data로 받는다. <-action에서 할 일
 export function loginUser(dataToSubmit) {
@@ -18,6 +19,15 @@ export function registerUser(dataToSubmit) {
     const request=axios.post("/api/users/register",dataToSubmit).then(response=>response.data)
     return{ //지정된 reducer로 보내준다.
         type : REGISTER_USER,
+        payload: request
+    }
+}
+
+
+export function auth() {
+    const request=axios.get("/api/users/auth").then(response=>response.data)
+    return{ //지정된 reducer로 보내준다.
+        type : AUTH_USER,
         payload: request
     }
 }

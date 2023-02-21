@@ -98,7 +98,7 @@ app.post('/api/users/login',(req,res)=>{
 
 //------------------------------Auth부분-----------------------------------------
 //app.post(경로,콜백함수) 인데 중간에 auth가 있다 -> auth 수행 후 ->req를 통해 해당 인증확인된 유저의 정보를 가져옴
-app.post("/api/users/auth",auth,(req,res)=>{
+app.get("/api/users/auth",auth,(req,res)=>{
 
   res.status(200).json({
     _id:req.user._id,
